@@ -1,0 +1,133 @@
+/**
+ * Add Two Numbers
+ *
+ * Short context:
+ * Each linked list stores a number in reverse order.
+ *
+ * Example:
+ *     342 -> 2 -> 4 -> 3
+ *     465 -> 5 -> 6 -> 4
+ *
+ * We need to add them:
+ *     342 + 465 = 807
+ *
+ * Because the numbers are reversed, we can start
+ * from the first node and perform normal addition.
+ */
+class Solution {
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+
+        /*
+         * STORY:
+         *
+         * Imagine two people are adding two numbers
+         * on paper.
+         *
+         * Person 1 has:
+         *     342
+         *
+         * Person 2 has:
+         *     465
+         *
+         * But the numbers are written backwards:
+         *
+         *     Person 1: 2 -> 4 -> 3
+         *     Person 2: 5 -> 6 -> 4
+         *
+         * So we start from the front.
+         *
+         * ------------------------------------------------
+         * STEP 1:
+         * 2 + 5 = 7
+         *
+         * Write down 7.
+         *
+         * Result:
+         *     7
+         *
+         * ------------------------------------------------
+         * STEP 2:
+         * 4 + 6 = 10
+         *
+         * We can only keep the 0 in this position.
+         * The 1 becomes a CARRY for the next position.
+         *
+         * Result:
+         *     7 -> 0
+         *           ^
+         *         carry = 1
+         *
+         * ------------------------------------------------
+         * STEP 3:
+         * 3 + 4 + carry(1) = 8
+         *
+         * Write down 8.
+         *
+         * Result:
+         *     7 -> 0 -> 8
+         *
+         * Therefore:
+         *
+         *     2 -> 4 -> 3
+         *     5 -> 6 -> 4
+         *     ------------
+         *     7 -> 0 -> 8
+         *
+         * Which represents:
+         *     807
+         *
+         * The trick is simply:
+         *
+         *     digit1 + digit2 + carry
+         *
+         * Then:
+         *
+         *     new digit = sum % 10
+         *     new carry = sum / 10
+         */
+
+        // Dummy node makes building the result easier.
+        ListNode dummy = new ListNode(0);
+
+        // 'curr' is where we attach the next result digit.
+        ListNode curr = dummy;
+
+        // Stores the carry from the previous addition.
+        int carry = 0;
+
+        // Keep going while either number still has digits
+        // OR there is a carry left.
+        while (l1 != null || l2 != null || carry != 0) {
+
+            int sum = carry;
+
+            // Take the current digit from the first number.
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+
+            // Take the current digit from the second number.
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+
+            // The last digit becomes our result digit.
+            int digit = sum % 10;
+
+            // Everything above 9 becomes the carry.
+            carry = sum / 10;
+
+            // Add the digit to our answer.
+            curr.next = new ListNode(digit);
+
+            // Move to the newly created node.
+            curr = curr.next;
+        }
+
+        // Dummy node itself isn't part of the answer.
+        return dummy.next;
+    }
+}
