@@ -1,0 +1,55 @@
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+
+        int n = nums.length;
+        int[] answer = new int[n];
+
+        // -----------------------------------------
+        // LEFT PASS
+        // answer[i] = product of everything
+        // to the LEFT of nums[i]
+        //
+        // Example: nums = [1, 2, 3, 4]
+        //
+        // answer becomes:
+        // [1, 1, 2, 6]
+        // -----------------------------------------
+
+        int leftProduct = 1;
+
+        for (int i = 0; i < n; i++) {
+
+            answer[i] = leftProduct;
+
+            leftProduct *= nums[i];
+        }
+
+
+        // -----------------------------------------
+        // RIGHT PASS
+        // Now multiply answer[i] by the product
+        // of everything to the RIGHT of nums[i]
+        //
+        // rightProduct keeps track of that product.
+        //
+        // Example:
+        //
+        // nums    = [1, 2, 3, 4]
+        // answer  = [1, 1, 2, 6]
+        //
+        // After this pass:
+        // answer  = [24, 12, 8, 6]
+        // -----------------------------------------
+
+        int rightProduct = 1;
+
+        for (int i = n - 1; i >= 0; i--) {
+
+            answer[i] *= rightProduct;
+
+            rightProduct *= nums[i];
+        }
+
+        return answer;
+    }
+}
